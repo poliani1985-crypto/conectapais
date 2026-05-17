@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConectaPais – Laços Educativos entre Família e Escola</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --roxo: #7C3AED; --roxo-light: #EDE9FE; --roxo-mid: #A78BFA;
+    --laranja: #F97316; --laranja-light: #FFF7ED; --laranja-mid: #FDBA74;
+    --verde: #10B981; --verde-light: #ECFDF5; --verde-dark: #065F46;
+    --rosa: #EC4899; --rosa-light: #FDF2F8;
+    --amarelo: #F59E0B; --amarelo-light: #FFFBEB;
+    --azul: #3B82F6; --azul-light: #EFF6FF;
+    --vermelho: #EF4444; --vermelho-light: #FEF2F2;
+    --cinza: #6B7280; --cinza-light: #F9FAFB;
+    --text-dark: #1F2937; --text-med: #374151; --text-light: #6B7280;
+    --white: #FFFFFF;
+    --radius: 20px; --radius-sm: 12px; --radius-lg: 28px;
+    --shadow: 0 8px 30px rgba(0,0,0,0.10);
+    --shadow-lg: 0 16px 48px rgba(0,0,0,0.14);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ====== PAGES ====== */
+  .page { display: none; min-height: 100vh; animation: fadeUp 0.55s cubic-bezier(.4,0,.2,1); }
+  .page.active { display: flex; flex-direction: column; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ====== TOPBAR ====== */
+  .topbar {
+    background: white;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 2rem;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg,#7C3AED,#EC4899,#F97316,#F59E0B,#10B981,#3B82F6) 1;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-logo { font-family: 'Baloo 2', cursive; font-size: 1.25rem; font-weight: 800;
+    background: linear-gradient(135deg, #7C3AED, #EC4899, #F97316);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .topbar-badge { font-size: 0.75rem; font-weight: 700; color: white;
+    background: linear-gradient(135deg, #7C3AED, #EC4899);
+    padding: 0.3rem 0.9rem; border-radius: 50px;
+  }
+
+  /* ====== CONTENT TOPBAR (for page-main) ====== */
+  .content-topbar {
+    background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.8rem 2rem; cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .content-topbar:hover { opacity: 0.92; }
+  .content-topbar-icon { font-size: 1.4rem; }
+  .content-topbar-text { font-family: 'Baloo 2', cursive; font-weight: 700; color: white; font-size: 1rem; }
+  .content-topbar-arrow { margin-left: auto; color: rgba(255,255,255,0.8); font-size: 1.2rem; }
+
+  /* ====== PAGE HOME ====== */
+  #page-home {
+    background: linear-gradient(160deg, #FFF9E6 0%, #FFF0FA 45%, #EFF6FF 100%);
+    position: relative; overflow: hidden;
+  }
+  .bg-circles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .bg-circle {
+    position: absolute; border-radius: 50%; opacity: 0.15;
+    animation: drift 8s ease-in-out infinite;
+  }
+  @keyframes drift { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(15px,-20px) scale(1.08);} }
+
+  .home-inner {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 3rem 1.5rem 4rem;
+    position: relative; z-index: 1; max-width: 760px; margin: 0 auto; width: 100%;
+  }
+  .home-emoji-row { font-size: 2.5rem; letter-spacing: 0.4rem; margin-bottom: 1rem; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+  .home-title {
+    font-family: 'Baloo 2', cursive; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+    text-align: center; line-height: 1.1; margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 40%, #F97316 80%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .home-subtitle { font-size: 1rem; color: #7B6F9A; font-weight: 600; text-align: center; margin-bottom: 2rem; letter-spacing: 0.03em; }
+
+  .welcome-card {
+    background: white; border-radius: var(--radius-lg); padding: 2rem 2.2rem;
+    box-shadow: var(--shadow-lg); margin-bottom: 2.5rem; width: 100%;
+    border: 2.5px dashed var(--amarelo-mid, #FCD34D);
+    position: relative; overflow: hidden;
+  }
+  .welcome-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, #7C3AED, #EC4899, #F97316, #F59E0B, #10B981, #3B82F6);
+  }
+  .welcome-card h2 { font-family: 'Baloo 2', cursive; font-size: 1.3rem; color: var(--roxo); margin-bottom: 0.9rem; font-weight: 700; }
+  .welcome-card p { color: var(--text-med); font-size: 0.97rem; line-height: 1.85; }
+  .welcome-card p + p { margin-top: 0.7rem; }
+  .highlight { color: var(--rosa); font-weight: 800; }
+  .highlight-g { color: var(--verde); font-weight: 800; }
+  .highlight-o { color: var(--laranja); font-weight: 800; }
+
+  .choose-label {
+    font-family: 'Baloo 2', cursive; font-size: 1.15rem; font-weight: 800;
+    color: var(--text-dark); text-align: center; margin-bottom: 1.2rem;
+  }
+  .btn-row { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; width: 100%; }
+
+  .btn-main {
+    flex: 1; min-width: 200px; max-width: 280px;
+    padding: 1.2rem 1.5rem; border: none; border-radius: var(--radius);
+    cursor: pointer; font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 800;
+    transition: all 0.22s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  }
+  .btn-main:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+  .btn-main:active { transform: scale(0.97); }
+  .btn-main .btn-emoji { font-size: 2rem; }
+  .btn-pedagogica { background: linear-gradient(135deg, #7C3AED, #A855F7); color: white; }
+  .btn-pais       { background: linear-gradient(135deg, #F97316, #F59E0B); color: white; }
+
+  .home-footer-icons { margin-top: 2.5rem; font-size: 1.5rem; letter-spacing: 0.5rem; opacity: 0.6; }
+
+  /* ====== TCLE PAGES ====== */
+  #page-tcle-ped, #page-tcle-pais {
+    background: linear-gradient(160deg, #F5F3FF 0%, #FFF0FA 100%);
+  }
+  .tcle-inner { flex: 1; max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 3rem; width: 100%; }
+  .tcle-header { text-align: center; margin-bottom: 1.5rem; }
+  .tcle-badge {
+    display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px;
+    font-weight: 800; font-size: 0.82rem; margin-bottom: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .badge-roxo { background: var(--roxo-light); color: var(--roxo); }
+  .badge-laranja { background: var(--laranja-light); color: var(--laranja); }
+  .tcle-header h2 { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; color: var(--text-dark); line-height: 1.2; }
+  .tcle-header p { font-size: 0.9rem; color: var(--cinza); margin-top: 0.4rem; }
+
+  .tcle-scroll-box {
+    background: white; border-radius: var(--radius); padding: 1.8rem;
+    box-shadow: var(--shadow); max-height: 380px; overflow-y: auto;
+    margin-bottom: 1.5rem; border: 1.5px solid #DDD6FE;
+    scrollbar-width: thin; scrollbar-color: #A78BFA #EDE9FE;
+  }
+  .tcle-scroll-box h3 { font-family: 'Baloo 2', cursive; color: var(--roxo); margin: 1rem 0 0.5rem; font-size: 1.05rem; }
+  .tcle-scroll-box h3:first-child { margin-top: 0; }
+  .tcle-scroll-box p { font-size: 0.91rem; color: var(--text-med); line-height: 1.85; margin-bottom: 0.8rem; }
+  .tcle-scroll-box ul { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+  .tcle-scroll-box ul li { font-size: 0.91rem; color: var(--text-med); line-height: 1.7; margin-bottom: 0.25rem; }
+  .tcle-scroll-box strong { color: var(--text-dark); }
+
+  .tcle-confirm { background: var(--verde-light); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.8rem; border: 1.5px solid #6EE7B7; }
+  .tcle-confirm label { font-size: 0.93rem; color: var(--verde-dark); font-weight: 600; cursor: pointer; line-height: 1.6; }
+  .tcle-confirm input[type=checkbox] { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--verde); flex-shrink: 0; }
+
+  .tcle-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-aceito {
+    padding: 1rem 2.5rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 800;
+    background: linear-gradient(135deg, #10B981, #059669); color: white;
+    box-shadow: 0 6px 20px rgba(16,185,129,0.35); transition: all 0.2s;
+  }
+  .btn-aceito:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(16,185,129,0.45); }
+  .btn-aceito:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-nao-aceito {
+    padding: 1rem 2rem; border: 2px solid #FCA5A5; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 800;
+    background: white; color: #EF4444; transition: all 0.2s;
+  }
+  .btn-nao-aceito:hover { background: #FEF2F2; transform: translateY(-2px); }
+
+  /* ====== ENCERRAMENTO ====== */
+  #page-encerramento {
+    background: linear-gradient(160deg, #FFFBEB 0%, #FFF5F5 100%);
+    justify-content: center; align-items: center;
+  }
+  .enc-inner { text-align: center; max-width: 520px; padding: 3rem 1.5rem; margin: 0 auto; }
+  .enc-emoji { font-size: 5rem; margin-bottom: 1.2rem; display: block; }
+  .enc-inner h2 { font-family: 'Baloo 2', cursive; font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1rem; }
+  .enc-inner p { color: var(--cinza); font-size: 1rem; line-height: 1.85; margin-bottom: 0.7rem; }
+  .enc-card { background: white; border-radius: var(--radius); padding: 1.5rem; margin-top: 1.5rem; box-shadow: var(--shadow); border-left: 5px solid var(--amarelo); }
+  .enc-card p { color: var(--text-med); font-size: 0.95rem; font-style: italic; }
+
+  /* ====== QUESTIONÁRIO ====== */
+  #page-quest-inicial, #page-quest-final {
+    background: linear-gradient(160deg, #ECFDF5 0%, #EFF6FF 100%);
+  }
+  .quest-inner { flex: 1; max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 3rem; width: 100%; }
+  .quest-header { text-align: center; margin-bottom: 2rem; }
+  .quest-header h2 { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; color: var(--text-dark); }
+  .quest-header p { font-size: 0.92rem; color: var(--cinza); margin-top: 0.4rem; }
+  .quest-progress { background: #D1FAE5; border-radius: 50px; height: 10px; margin: 1rem 0 1.5rem; overflow: hidden; }
+  .quest-progress-bar { height: 100%; background: linear-gradient(90deg, #10B981, #3B82F6); border-radius: 50px; transition: width 0.4s ease; }
+
+  .quest-card {
+    background: white; border-radius: var(--radius); padding: 1.8rem;
+    box-shadow: var(--shadow); margin-bottom: 1.2rem;
+    border-left: 5px solid var(--verde);
+  }
+  .quest-card.quest-card-blue { border-left-color: var(--azul); }
+  .quest-card.quest-card-roxo { border-left-color: var(--roxo); }
+  .quest-num { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--verde); margin-bottom: 0.4rem; }
+  .quest-card.quest-card-blue .quest-num { color: var(--azul); }
+  .quest-card.quest-card-roxo .quest-num { color: var(--roxo); }
+  .quest-card label { font-size: 0.97rem; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 0.9rem; line-height: 1.5; }
+  .quest-card input[type=text], .quest-card textarea, .quest-card select {
+    width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #D1D5DB; border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif; font-size: 0.95rem; color: var(--text-dark);
+    transition: border-color 0.2s; outline: none; background: #FAFAFA;
+  }
+  .quest-card input[type=text]:focus, .quest-card textarea:focus, .quest-card select:focus {
+    border-color: var(--verde); background: white; box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+  }
+  .quest-card textarea { resize: vertical; min-height: 90px; }
+  .radio-group, .check-group { display: flex; flex-direction: column; gap: 0.6rem; }
+  .radio-opt, .check-opt {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.65rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid #E5E7EB;
+    cursor: pointer; transition: all 0.18s; background: #FAFAFA;
+  }
+  .radio-opt:hover, .check-opt:hover { border-color: var(--verde); background: var(--verde-light); }
+  .radio-opt input, .check-opt input { accent-color: var(--verde); width: 18px; height: 18px; }
+  .radio-opt span, .check-opt span { font-size: 0.93rem; color: var(--text-med); font-weight: 600; }
+
+  .btn-enviar {
+    display: block; width: 100%; max-width: 340px; margin: 2rem auto 0;
+    padding: 1.1rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 800;
+    background: linear-gradient(135deg, #3B82F6, #7C3AED); color: white;
+    box-shadow: 0 6px 20px rgba(59,130,246,0.35); transition: all 0.22s;
+  }
+  .btn-enviar:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(59,130,246,0.45); }
+
+  /* ====== PAGE MAIN ====== */
+  #page-main {
+    background: linear-gradient(180deg, #FAFAFA 0%, #F3F4F6 100%);
+    flex-direction: column;
+  }
+  .main-hero {
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F97316 100%);
+    padding: 2.5rem 2rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .main-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='white' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E") repeat;
+  }
+  .main-hero h1 { font-family: 'Baloo 2', cursive; font-size: clamp(1.4rem,3vw,2rem); font-weight: 800; color: white; position: relative; }
+  .main-hero p { color: rgba(255,255,255,0.9); font-size: 0.95rem; position: relative; margin-top: 0.4rem; }
+
+  .main-body { flex: 1; max-width: 900px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; width: 100%; }
+
+  .section-title {
+    font-family: 'Baloo 2', cursive; font-size: 1.25rem; font-weight: 800;
+    color: var(--text-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, currentColor, transparent); opacity: 0.2; }
+
+  /* Content cards */
+  .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+  .content-card {
+    background: white; border-radius: var(--radius); padding: 1.5rem;
+    box-shadow: var(--shadow); transition: all 0.22s; cursor: pointer;
+    border-top: 5px solid var(--roxo); position: relative; overflow: hidden;
+  }
+  .content-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+  .content-card.card-verde { border-top-color: var(--verde); }
+  .content-card.card-azul  { border-top-color: var(--azul); }
+  .content-card.card-rosa  { border-top-color: var(--rosa); }
+  .content-card.card-amarelo { border-top-color: var(--amarelo); }
+  .content-card.card-laranja { border-top-color: var(--laranja); }
+  .card-emoji { font-size: 2.2rem; margin-bottom: 0.7rem; display: block; }
+  .card-tag { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roxo); margin-bottom: 0.4rem; }
+  .content-card.card-verde .card-tag { color: var(--verde); }
+  .content-card.card-azul .card-tag { color: var(--azul); }
+  .content-card.card-rosa .card-tag { color: var(--rosa); }
+  .content-card.card-amarelo .card-tag { color: var(--amarelo); }
+  .content-card.card-laranja .card-tag { color: var(--laranja); }
+  .card-title { font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1.05rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+  .card-desc { font-size: 0.88rem; color: var(--cinza); line-height: 1.6; }
+  .card-type-pill {
+    position: absolute; top: 1rem; right: 1rem;
+    font-size: 0.7rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 50px;
+    background: var(--roxo-light); color: var(--roxo);
+  }
+  .content-card.card-verde .card-type-pill { background: var(--verde-light); color: var(--verde); }
+  .content-card.card-azul  .card-type-pill { background: var(--azul-light); color: var(--azul); }
+  .content-card.card-rosa  .card-type-pill { background: var(--rosa-light); color: var(--rosa); }
+
+  /* Dúvidas section */
+  .duvidas-box {
+    background: white; border-radius: var(--radius); padding: 2rem;
+    box-shadow: var(--shadow); border: 2px dashed var(--amarelo);
+    margin-bottom: 2rem;
+  }
+  .duvidas-box h3 { font-family: 'Baloo 2', cursive; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.4rem; }
+  .duvidas-box p { font-size: 0.91rem; color: var(--cinza); margin-bottom: 1rem; line-height: 1.6; }
+  .duvidas-form { display: flex; flex-direction: column; gap: 0.8rem; }
+  .duvidas-form input, .duvidas-form textarea {
+    padding: 0.8rem 1rem; border: 1.5px solid #E5E7EB; border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif; font-size: 0.94rem; outline: none; transition: border-color 0.2s;
+  }
+  .duvidas-form input:focus, .duvidas-form textarea:focus { border-color: var(--amarelo); box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+  .duvidas-form textarea { min-height: 100px; resize: vertical; }
+  .btn-enviar-duvida {
+    padding: 0.85rem 2rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 0.97rem; font-weight: 800;
+    background: linear-gradient(135deg, #F59E0B, #F97316); color: white;
+    box-shadow: 0 4px 14px rgba(245,158,11,0.35); transition: all 0.2s; align-self: flex-start;
+  }
+  .btn-enviar-duvida:hover { transform: translateY(-2px); }
+  .duvida-enviada { display: none; background: var(--verde-light); border-radius: var(--radius-sm); padding: 1rem; color: var(--verde-dark); font-weight: 700; }
+
+  /* ====== PAGE RETA FINAL ====== */
+  #page-reta-final {
+    background: linear-gradient(160deg, #FFF7ED 0%, #FDF2F8 100%);
+    justify-content: center; align-items: center;
+  }
+  .rf-inner { max-width: 600px; padding: 3rem 1.5rem; margin: 0 auto; text-align: center; }
+  .rf-banner {
+    background: linear-gradient(135deg, #F97316, #EC4899); border-radius: var(--radius);
+    padding: 2rem; margin-bottom: 2rem; color: white;
+  }
+  .rf-banner h2 { font-family: 'Baloo 2', cursive; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .rf-banner p { font-size: 0.97rem; opacity: 0.93; line-height: 1.7; }
+  .rf-inner > p { color: var(--text-med); font-size: 0.97rem; line-height: 1.8; margin-bottom: 1.5rem; }
+  .rf-btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-rf-ped { padding: 1rem 2rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1rem; font-weight: 800;
+    background: linear-gradient(135deg, #7C3AED, #A855F7); color: white;
+    box-shadow: 0 5px 18px rgba(124,58,237,0.35); transition: all 0.2s;
+  }
+  .btn-rf-pais { padding: 1rem 2rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1rem; font-weight: 800;
+    background: linear-gradient(135deg, #F97316, #F59E0B); color: white;
+    box-shadow: 0 5px 18px rgba(249,115,22,0.35); transition: all 0.2s;
+  }
+  .btn-rf-ped:hover, .btn-rf-pais:hover { transform: translateY(-3px); }
+
+  /* ====== ENQUETE ====== */
+  #page-enquete {
+    background: linear-gradient(160deg, #EFF6FF 0%, #F5F3FF 100%);
+    justify-content: center; align-items: center;
+  }
+  .enquete-inner { max-width: 580px; padding: 3rem 1.5rem; margin: 0 auto; text-align: center; }
+  .enquete-inner h2 { font-family: 'Baloo 2', cursive; font-size: 1.6rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.5rem; }
+  .enquete-inner > p { color: var(--cinza); font-size: 0.97rem; margin-bottom: 2rem; line-height: 1.7; }
+  .enquete-card { background: white; border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+  .enquete-card p { font-weight: 700; color: var(--text-dark); margin-bottom: 1.2rem; font-size: 1rem; }
+  .enquete-opts { display: flex; flex-direction: column; gap: 0.8rem; }
+  .enquete-opt {
+    padding: 0.9rem 1.2rem; border-radius: var(--radius-sm); border: 2px solid #E5E7EB;
+    cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: all 0.18s;
+    background: white; color: var(--text-dark); text-align: left;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .enquete-opt:hover { border-color: var(--azul); background: var(--azul-light); color: var(--azul); }
+  .enquete-opt.selected { border-color: var(--verde); background: var(--verde-light); color: var(--verde-dark); }
+  .btn-confirmar-enquete {
+    padding: 1rem 2.5rem; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', cursive; font-size: 1.05rem; font-weight: 800;
+    background: linear-gradient(135deg, #3B82F6, #7C3AED); color: white;
+    box-shadow: 0 6px 20px rgba(59,130,246,0.35); transition: all 0.22s;
+  }
+  .btn-confirmar-enquete:hover { transform: translateY(-3px); }
+  .btn-confirmar-enquete:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ====== AGRADECIMENTO FINAL ====== */
+  #page-agradecimento {
+    background: linear-gradient(160deg, #ECFDF5 0%, #EFF6FF 40%, #F5F3FF 100%);
+    justify-content: center; align-items: center;
+  }
+  .agr-inner { max-width: 580px; padding: 3rem 1.5rem; margin: 0 auto; text-align: center; }
+  .agr-emoji-big { font-size: 5rem; display: block; margin-bottom: 1rem; animation: popIn 0.6s cubic-bezier(.4,0,.2,1); }
+  @keyframes popIn { from{transform:scale(0.5);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .agr-inner h2 { font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 800; color: var(--roxo); margin-bottom: 0.8rem; }
+  .agr-card {
+    background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-lg);
+    margin: 1.5rem 0; border-top: 6px solid var(--verde);
+  }
+  .agr-card p { color: var(--text-med); font-size: 0.97rem; line-height: 1.9; }
+  .agr-card p + p { margin-top: 0.8rem; }
+  .agr-card strong { color: var(--roxo); }
+  .agr-pesquisadora { margin-top: 1.5rem; font-size: 0.9rem; color: var(--cinza); }
+  .agr-pesquisadora strong { color: var(--text-dark); font-size: 1rem; display: block; margin-top: 0.3rem; }
+  .agr-flowers { font-size: 2rem; letter-spacing: 0.5rem; margin-top: 1.5rem; display: block; }
+
+  /* ====== CONTEUDOS ANTERIORES ====== */
+  #page-anteriores {
+    background: linear-gradient(160deg, #F5F3FF 0%, #EFF6FF 100%);
+  }
+  .ant-inner { flex: 1; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 3rem; width: 100%; }
+  .ant-header { margin-bottom: 1.5rem; }
+  .ant-header h2 { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.3rem; }
+  .ant-header p { color: var(--cinza); font-size: 0.92rem; }
+  .btn-voltar {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.2rem; border: 2px solid var(--roxo-light); border-radius: 50px;
+    background: white; color: var(--roxo); font-family: 'Baloo 2', cursive; font-weight: 700;
+    font-size: 0.9rem; cursor: pointer; margin-bottom: 1.5rem; transition: all 0.18s;
+  }
+  .btn-voltar:hover { background: var(--roxo-light); }
+
+  /* ====== MODAL CONTENT ====== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem; animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .modal-box {
+    background: white; border-radius: var(--radius-lg); width: 100%; max-width: 600px;
+    max-height: 85vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    animation: modalUp 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes modalUp { from{transform:translateY(30px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  .modal-header {
+    padding: 1.5rem 1.8rem 1rem; border-bottom: 1.5px solid #F3F4F6;
+    position: sticky; top: 0; background: white; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  }
+  .modal-header h3 { font-family: 'Baloo 2', cursive; font-size: 1.2rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
+  .btn-fechar-modal {
+    width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #E5E7EB;
+    background: #F9FAFB; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s;
+  }
+  .btn-fechar-modal:hover { background: #FEE2E2; border-color: #FECACA; }
+  .modal-body { padding: 1.5rem 1.8rem 2rem; }
+  .modal-body p { font-size: 0.95rem; color: var(--text-med); line-height: 1.9; margin-bottom: 1rem; }
+  .modal-body h4 { font-family: 'Baloo 2', cursive; color: var(--roxo); margin: 1.2rem 0 0.5rem; font-size: 1rem; font-weight: 700; }
+  .modal-body ul { padding-left: 1.3rem; margin-bottom: 1rem; }
+  .modal-body ul li { font-size: 0.93rem; color: var(--text-med); line-height: 1.7; margin-bottom: 0.3rem; }
+  .modal-video-placeholder {
+    background: linear-gradient(135deg, var(--roxo-light), var(--azul-light));
+    border-radius: var(--radius-sm); padding: 2.5rem 1rem; text-align: center;
+    margin-bottom: 1rem; border: 2px dashed var(--roxo-mid);
+  }
+  .modal-video-placeholder span { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+  .modal-video-placeholder p { color: var(--roxo); font-weight: 700; margin: 0; font-size: 0.9rem; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 600px) {
+    .topbar { padding: 0.6rem 1rem; }
+    .home-inner, .tcle-inner, .quest-inner, .main-body, .ant-inner { padding-left: 1rem; padding-right: 1rem; }
+    .content-grid { grid-template-columns: 1fr; }
+    .btn-row { flex-direction: column; align-items: center; }
+    .tcle-actions { flex-direction: column; align-items: center; }
+    .rf-btn-row { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== PAGE HOME ===================== -->
+<div id="page-home" class="page active">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">UTFPR · PPGEN</span>
+  </div>
+  <div class="bg-circles">
+    <div class="bg-circle" style="width:320px;height:320px;background:#7C3AED;top:-100px;left:-80px;animation-delay:0s;"></div>
+    <div class="bg-circle" style="width:220px;height:220px;background:#EC4899;top:60px;right:-60px;animation-delay:2s;"></div>
+    <div class="bg-circle" style="width:180px;height:180px;background:#F97316;bottom:80px;left:30px;animation-delay:4s;"></div>
+    <div class="bg-circle" style="width:260px;height:260px;background:#F59E0B;bottom:-80px;right:40px;animation-delay:1s;"></div>
+  </div>
+  <div class="home-inner">
+    <div class="home-emoji-row">🌈 🏫 💛 👨‍👩‍👧 🌱</div>
+    <h1 class="home-title">ConectaPais</h1>
+    <p class="home-subtitle">Laços Educativos entre Família e Escola</p>
+
+    <div class="welcome-card">
+      <h2>💜 Bem-vindo(a)! Que alegria ter você aqui!</h2>
+      <p>
+        Este espaço foi criado com muito carinho como parte de uma <span class="highlight">pesquisa de mestrado</span> da 
+        <strong>Universidade Tecnológica Federal do Paraná (UTFPR)</strong>, no Programa de Pós-Graduação em Ensino 
+        de Ciências Humanas, Sociais e da Natureza.
+      </p>
+      <p>
+        O <span class="highlight">ConectaPais</span> é um produto educacional pensado para 
+        <span class="highlight-g">aproximar famílias e equipe pedagógica</span>, 
+        compartilhando informações sobre o trabalho que acontece todos os dias na educação infantil — 
+        com carinho, respeito e muita parceria! 🤝
+      </p>
+      <p>
+        Agradecemos imensamente por estar aqui e por fazer parte desta <span class="highlight-o">jornada educativa</span>. 
+        Sua participação é muito especial e faz toda a diferença! 💛
+      </p>
+      <p>
+        <strong>Pesquisadora:</strong> Poliani Cristina Fratoni de Oliveira &nbsp;|&nbsp; 
+        <strong>Orientador:</strong> Prof. Dr. David da Silva Pereira
+      </p>
+    </div>
+
+    <p class="choose-label">👇 Para começar, diga quem é você:</p>
+    <div class="btn-row">
+      <button class="btn-main btn-pedagogica" onclick="goTo('page-tcle-ped')">
+        <span class="btn-emoji">👩‍🏫</span>
+        <span>Equipe Pedagógica</span>
+        <span style="font-size:0.82rem;opacity:0.9;font-weight:600;">Professores e gestores</span>
+      </button>
+      <button class="btn-main btn-pais" onclick="goTo('page-tcle-pais')">
+        <span class="btn-emoji">👨‍👩‍👧‍👦</span>
+        <span>Pais / Mães / Responsáveis</span>
+        <span style="font-size:0.82rem;opacity:0.9;font-weight:600;">Famílias do CMEI</span>
+      </button>
+    </div>
+    <div class="home-footer-icons">🌸 🎨 📚 🎵 ⭐ 🦋 🌻</div>
+  </div>
+</div>
+
+<!-- ===================== PAGE TCLE PEDAGÓGICA ===================== -->
+<div id="page-tcle-ped" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Equipe Pedagógica</span>
+  </div>
+  <div class="tcle-inner">
+    <div class="tcle-header">
+      <span class="tcle-badge badge-roxo">📋 Termo de Consentimento</span>
+      <h2>TCLE – Equipe Pedagógica e Profissionais</h2>
+      <p>Leia com atenção antes de prosseguir. Role até o final para as opções.</p>
+    </div>
+    <div class="tcle-scroll-box">
+      <h3>🏛️ Identificação da Pesquisa</h3>
+      <p><strong>Título:</strong> Participação das Famílias na Educação Infantil em Município do Norte Pioneiro do Paraná: Desenvolvimento de Produto Educativo Tecnológico para Fortalecimento da Relação Família-Escola.</p>
+      <p><strong>Pesquisadora:</strong> Poliani Cristina Fratoni de Oliveira<br>
+      <strong>Orientador:</strong> Prof. Dr. David da Silva Pereira<br>
+      <strong>Instituição:</strong> Universidade Tecnológica Federal do Paraná (UTFPR) – Programa de Pós-Graduação em Ensino de Ciências Humanas, Sociais e da Natureza (PPGEN)</p>
+
+      <h3>🎯 Sobre a Pesquisa</h3>
+      <p>Esta pesquisa tem como objetivo analisar de que maneira o produto educacional <strong>ConectaPais: Laços Educativos entre Família e Escola</strong> pode contribuir para ampliar a compreensão das famílias sobre o trabalho pedagógico desenvolvido na educação infantil e fortalecer a relação entre família e equipe pedagógica.</p>
+      <p>Você está sendo convidado(a) como membro da equipe pedagógica e profissionais da instituição (Grupo B – Grupo Colaborador) a participar desta pesquisa de forma voluntária.</p>
+
+      <h3>📝 Como será sua participação</h3>
+      <p>Sua participação envolverá:</p>
+      <ul>
+        <li>Leitura e assinatura deste Termo de Consentimento Livre e Esclarecido (TCLE);</li>
+        <li>Resposta a um questionário inicial (percepções sobre participação familiar);</li>
+        <li>Colaboração durante os 70 dias de implementação do produto, auxiliando nas respostas às dúvidas das famílias;</li>
+        <li>Resposta a um questionário final (percepções após a intervenção);</li>
+        <li>Participação opcional em enquete e encontro presencial de encerramento.</li>
+      </ul>
+
+      <h3>⏱️ Duração e Local</h3>
+      <p>A pesquisa será realizada de forma híbrida (presencial e online), no CMEI participante, com duração aproximada de 70 dias para a etapa digital, além dos momentos presenciais previstos no calendário escolar.</p>
+
+      <h3>🔒 Anonimato e Confidencialidade</h3>
+      <p>Para garantir seu anonimato, você será identificado(a) por um <strong>código individual</strong>: utilize as <strong>duas primeiras letras do seu nome + dois números referentes à sua idade</strong> (exemplo: MA38). Suas informações serão utilizadas exclusivamente para fins acadêmicos e científicos.</p>
+      <p>Os dados serão armazenados em ambiente digital seguro, de acesso restrito à pesquisadora e ao orientador, pelo período de até cinco anos após a finalização da pesquisa.</p>
+
+      <h3>⚠️ Riscos e Benefícios</h3>
+      <p><strong>Riscos:</strong> Esta pesquisa apresenta riscos mínimos — possível desconforto emocional ao responder questões sobre experiências profissionais. Você pode interromper sua participação a qualquer momento, sem qualquer prejuízo.</p>
+      <p><strong>Benefícios:</strong> Fortalecimento da relação família-escola, maior visibilidade do trabalho pedagógico, espaços de diálogo e comunicação mais próxima com as famílias.</p>
+
+      <h3>🚪 Voluntariedade e Direito de Retirada</h3>
+      <p>Sua participação é totalmente voluntária. Você poderá desistir a qualquer momento, sem necessidade de justificativa e sem qualquer prejuízo profissional ou institucional. Você também tem liberdade para não responder a qualquer questão que cause desconforto.</p>
+
+      <h3>📞 Contato</h3>
+      <p>Em caso de dúvidas sobre a pesquisa, entre em contato com a pesquisadora Poliani Cristina Fratoni de Oliveira. Esta pesquisa foi aprovada pelo Comitê de Ética em Pesquisa da UTFPR, conforme a Resolução CNE/CNS nº 466/2012.</p>
+    </div>
+
+    <div class="tcle-confirm">
+      <input type="checkbox" id="check-ped" onchange="toggleBtnPed(this)">
+      <label for="check-ped">
+        Li e compreendi todas as informações acima. Declaro que estou participando de forma voluntária e que fui esclarecido(a) sobre os objetivos, procedimentos, riscos e benefícios desta pesquisa. <strong>Consinto em participar como membro da equipe pedagógica (Grupo B).</strong>
+      </label>
+    </div>
+    <div class="tcle-actions">
+      <button class="btn-aceito" id="btn-aceito-ped" onclick="aceitarTCLE('ped')" disabled>✅ Aceito Participar</button>
+      <button class="btn-nao-aceito" onclick="naoAceitar()">❌ Não Aceito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE TCLE PAIS ===================== -->
+<div id="page-tcle-pais" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Pais / Responsáveis</span>
+  </div>
+  <div class="tcle-inner">
+    <div class="tcle-header">
+      <span class="tcle-badge badge-laranja">📋 Termo de Consentimento</span>
+      <h2>TCLE – Pais, Mães e Responsáveis</h2>
+      <p>Leia com atenção antes de prosseguir. Role até o final para as opções.</p>
+    </div>
+    <div class="tcle-scroll-box" style="border-color:#FED7AA;">
+      <h3 style="color:var(--laranja);">🏛️ Identificação da Pesquisa</h3>
+      <p><strong>Título:</strong> Participação das Famílias na Educação Infantil em Município do Norte Pioneiro do Paraná: Desenvolvimento de Produto Educativo Tecnológico para Fortalecimento da Relação Família-Escola.</p>
+      <p><strong>Pesquisadora:</strong> Poliani Cristina Fratoni de Oliveira<br>
+      <strong>Orientador:</strong> Prof. Dr. David da Silva Pereira<br>
+      <strong>Instituição:</strong> Universidade Tecnológica Federal do Paraná (UTFPR)</p>
+
+      <h3 style="color:var(--laranja);">🎯 Sobre a Pesquisa</h3>
+      <p>Esta pesquisa foi criada com muito carinho para <strong>aproximar as famílias da escola</strong> e ajudar todos a entender melhor o trabalho que os professores e profissionais fazem todos os dias com as crianças na educação infantil.</p>
+      <p>Você está sendo convidado(a) como pai, mãe ou responsável por uma criança matriculada no CMEI (Grupo A – Grupo Principal) a participar desta pesquisa de forma voluntária.</p>
+
+      <h3 style="color:var(--laranja);">📝 Como será sua participação</h3>
+      <p>Sua participação envolverá:</p>
+      <ul>
+        <li>Leitura e aceite deste Termo de Consentimento;</li>
+        <li>Resposta a um questionário inicial (o que você já sabe sobre a educação infantil);</li>
+        <li>Acesso aos conteúdos do ConectaPais durante aproximadamente 70 dias — com textos, imagens e vídeos curtos sobre a educação do seu filho(a);</li>
+        <li>Espaço para tirar dúvidas diretamente com a equipe pedagógica;</li>
+        <li>Resposta a um questionário final;</li>
+        <li>Participação opcional em enquete e encontro presencial de encerramento.</li>
+      </ul>
+
+      <h3 style="color:var(--laranja);">🔒 Seu Anonimato está Garantido</h3>
+      <p>Você será identificado(a) por um <strong>código individual</strong>: utilize as <strong>duas primeiras letras do nome da criança + dois números referentes à idade da criança</strong> (exemplo: MA04). Nenhuma informação pessoal sua ou de seu filho(a) será divulgada publicamente.</p>
+      <p>Todos os dados ficam guardados com segurança e serão usados apenas para a pesquisa científica, por até 5 anos.</p>
+
+      <h3 style="color:var(--laranja);">⚠️ Riscos e Benefícios</h3>
+      <p><strong>Riscos:</strong> Esta pesquisa tem riscos mínimos — pode ser que alguma pergunta cause um leve desconforto. Mas você é livre para pular qualquer questão ou encerrar sua participação quando quiser, sem nenhum problema.</p>
+      <p><strong>Benefícios:</strong> Você poderá conhecer melhor o que seu filho(a) aprende e vive na escola, fortalecer a parceria com os professores e participar mais da educação da criança.</p>
+
+      <h3 style="color:var(--laranja);">🚪 Participação Voluntária</h3>
+      <p>Sua participação é completamente voluntária. Você pode desistir a qualquer momento, sem precisar explicar o motivo e sem nenhum prejuízo para a sua família ou para a situação do seu filho(a) na escola.</p>
+
+      <h3 style="color:var(--laranja);">📞 Dúvidas?</h3>
+      <p>Se tiver qualquer dúvida, fique à vontade para perguntar à pesquisadora Poliani. Esta pesquisa foi aprovada pelo Comitê de Ética em Pesquisa da UTFPR, seguindo as normas da Resolução CNS nº 466/2012.</p>
+    </div>
+
+    <div class="tcle-confirm" style="border-color:#FCD34D;background:#FFFBEB;">
+      <input type="checkbox" id="check-pais" onchange="toggleBtnPais(this)">
+      <label for="check-pais" style="color:#92400E;">
+        Li e entendi tudo que está escrito acima. Aceito participar desta pesquisa de forma voluntária, como pai/mãe/responsável (Grupo A). Sei que posso sair quando quiser e que minha identidade será protegida. <strong>Quero fazer parte do ConectaPais!</strong>
+      </label>
+    </div>
+    <div class="tcle-actions">
+      <button class="btn-aceito" id="btn-aceito-pais" onclick="aceitarTCLE('pais')" disabled style="background:linear-gradient(135deg,#F97316,#F59E0B);box-shadow:0 6px 20px rgba(249,115,22,0.35);">✅ Aceito Participar</button>
+      <button class="btn-nao-aceito" onclick="naoAceitar()">❌ Não Aceito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE ENCERRAMENTO ===================== -->
+<div id="page-encerramento" class="page">
+  <div class="enc-inner">
+    <span class="enc-emoji">🤗</span>
+    <h2>Obrigada pela sua visita!</h2>
+    <p>Respeitamos totalmente a sua decisão de não participar desta pesquisa.</p>
+    <p>Cada pessoa tem o direito de escolher o que é melhor para si, e essa escolha é completamente válida e respeitada por nós. 💛</p>
+    <div class="enc-card">
+      <p>"A participação voluntária é a base de toda pesquisa ética. Agradecemos por ter lido as informações com atenção e por considerar fazer parte deste projeto."</p>
+    </div>
+    <p style="color:#6B7280;font-size:0.9rem;margin-top:1.5rem;">
+      — Poliani Cristina Fratoni de Oliveira<br>
+      <em>Pesquisadora – UTFPR/PPGEN</em>
+    </p>
+  </div>
+</div>
+
+<!-- ===================== PAGE QUESTIONÁRIO INICIAL ===================== -->
+<div id="page-quest-inicial" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge" id="badge-quest">Questionário Inicial</span>
+  </div>
+  <div class="quest-inner">
+    <div class="quest-header">
+      <h2>📝 Questionário Inicial</h2>
+      <p id="desc-quest">Suas respostas nos ajudam a entender melhor a realidade da comunidade escolar.</p>
+    </div>
+    <div class="quest-progress"><div class="quest-progress-bar" id="progress-bar" style="width:0%"></div></div>
+
+    <!-- PERGUNTAS GRUPO A (PAIS) -->
+    <div id="quest-pais">
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 1 de 8 — Identificação</div>
+        <label>Qual é o seu código de participante? <em>(duas primeiras letras do nome da criança + dois números da idade. Ex: MA04)</em></label>
+        <input type="text" placeholder="Ex: MA04" maxlength="6" oninput="updateProgress('pais')">
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 2 de 8 — Perfil</div>
+        <label>Qual é a sua relação com a criança matriculada no CMEI?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qp2" onchange="updateProgress('pais')"><span>Mãe</span></label>
+          <label class="radio-opt"><input type="radio" name="qp2" onchange="updateProgress('pais')"><span>Pai</span></label>
+          <label class="radio-opt"><input type="radio" name="qp2" onchange="updateProgress('pais')"><span>Avô / Avó</span></label>
+          <label class="radio-opt"><input type="radio" name="qp2" onchange="updateProgress('pais')"><span>Outro responsável legal</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 3 de 8 — Educação Infantil</div>
+        <label>Para você, qual é o principal papel da educação infantil?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qp3" onchange="updateProgress('pais')"><span>Cuidar e guardar a criança enquanto os pais trabalham</span></label>
+          <label class="radio-opt"><input type="radio" name="qp3" onchange="updateProgress('pais')"><span>Ensinar a ler e escrever para preparar para o futuro</span></label>
+          <label class="radio-opt"><input type="radio" name="qp3" onchange="updateProgress('pais')"><span>Contribuir para o desenvolvimento integral da criança (social, emocional, cognitivo)</span></label>
+          <label class="radio-opt"><input type="radio" name="qp3" onchange="updateProgress('pais')"><span>Socializar a criança com outras crianças</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 4 de 8 — Trabalho Pedagógico</div>
+        <label>O quanto você conhece sobre o trabalho pedagógico que é realizado na sala do seu filho(a)?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qp4" onchange="updateProgress('pais')"><span>Conheço muito bem — entendo as atividades e objetivos</span></label>
+          <label class="radio-opt"><input type="radio" name="qp4" onchange="updateProgress('pais')"><span>Conheço um pouco — sei o básico do que acontece</span></label>
+          <label class="radio-opt"><input type="radio" name="qp4" onchange="updateProgress('pais')"><span>Conheço pouco — ouço às vezes, mas não entendo muito</span></label>
+          <label class="radio-opt"><input type="radio" name="qp4" onchange="updateProgress('pais')"><span>Não conheço — não tenho informações sobre isso</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 5 de 8 — Participação</div>
+        <label>Como você costuma participar da vida escolar do seu filho(a)? <em>(pode marcar mais de uma)</em></label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" onchange="updateProgress('pais')"><span>Comparecendo às reuniões de pais</span></label>
+          <label class="check-opt"><input type="checkbox" onchange="updateProgress('pais')"><span>Participando de eventos e festas</span></label>
+          <label class="check-opt"><input type="checkbox" onchange="updateProgress('pais')"><span>Conversando com os professores na entrada/saída</span></label>
+          <label class="check-opt"><input type="checkbox" onchange="updateProgress('pais')"><span>Lendo comunicados e avisos enviados pela escola</span></label>
+          <label class="check-opt"><input type="checkbox" onchange="updateProgress('pais')"><span>Pouco — tenho dificuldade por conta do trabalho e rotina</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-rosa">
+        <div class="quest-num">Pergunta 6 de 8 — Comunicação</div>
+        <label>Como você avalia a comunicação entre sua família e a escola atualmente?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qp6" onchange="updateProgress('pais')"><span>⭐⭐⭐⭐⭐ Muito boa — me sinto bem informado(a)</span></label>
+          <label class="radio-opt"><input type="radio" name="qp6" onchange="updateProgress('pais')"><span>⭐⭐⭐⭐ Boa — funciona bem na maioria das vezes</span></label>
+          <label class="radio-opt"><input type="radio" name="qp6" onchange="updateProgress('pais')"><span>⭐⭐⭐ Regular — às vezes falta comunicação</span></label>
+          <label class="radio-opt"><input type="radio" name="qp6" onchange="updateProgress('pais')"><span>⭐⭐ Fraca — precisa melhorar bastante</span></label>
+          <label class="radio-opt"><input type="radio" name="qp6" onchange="updateProgress('pais')"><span>⭐ Muito fraca — quase não tenho informações</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 7 de 8 — Dificuldades</div>
+        <label>Quais são as principais dificuldades que você encontra para participar mais da vida escolar do seu filho(a)?</label>
+        <textarea placeholder="Escreva aqui sua resposta..." oninput="updateProgress('pais')"></textarea>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 8 de 8 — Expectativas</div>
+        <label>O que você espera encontrar no ConectaPais? O que gostaria de aprender ou saber mais sobre a educação do seu filho(a)?</label>
+        <textarea placeholder="Escreva livremente..." oninput="updateProgress('pais')"></textarea>
+      </div>
+    </div>
+
+    <!-- PERGUNTAS GRUPO B (PEDAGÓGICA) -->
+    <div id="quest-ped" style="display:none">
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 1 de 6 — Identificação</div>
+        <label>Qual é o seu código de participante? <em>(duas primeiras letras do seu nome + dois números da sua idade. Ex: PO32)</em></label>
+        <input type="text" placeholder="Ex: PO32" maxlength="6" oninput="updateProgress('ped')">
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 2 de 6 — Função</div>
+        <label>Qual é a sua função na instituição?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qe2" onchange="updateProgress('ped')"><span>Professora(or)</span></label>
+          <label class="radio-opt"><input type="radio" name="qe2" onchange="updateProgress('ped')"><span>Coordenação pedagógica</span></label>
+          <label class="radio-opt"><input type="radio" name="qe2" onchange="updateProgress('ped')"><span>Direção</span></label>
+          <label class="radio-opt"><input type="radio" name="qe2" onchange="updateProgress('ped')"><span>Outro profissional da instituição</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 3 de 6 — Participação Familiar</div>
+        <label>Como você avalia a participação das famílias no cotidiano escolar atualmente?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qe3" onchange="updateProgress('ped')"><span>Muito ativa — as famílias participam com frequência</span></label>
+          <label class="radio-opt"><input type="radio" name="qe3" onchange="updateProgress('ped')"><span>Ativa — participam, mas poderia ser mais frequente</span></label>
+          <label class="radio-opt"><input type="radio" name="qe3" onchange="updateProgress('ped')"><span>Regular — participam principalmente em eventos específicos</span></label>
+          <label class="radio-opt"><input type="radio" name="qe3" onchange="updateProgress('ped')"><span>Pouco ativa — a participação é limitada e pontual</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 4 de 6 — Desafios</div>
+        <label>Quais são os principais desafios que você observa na comunicação entre a escola e as famílias?</label>
+        <textarea placeholder="Descreva os desafios observados no cotidiano escolar..." oninput="updateProgress('ped')"></textarea>
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 5 de 6 — Tecnologia</div>
+        <label>Na sua opinião, o uso de recursos tecnológicos pode contribuir para melhorar a relação família-escola? Por quê?</label>
+        <textarea placeholder="Escreva sua opinião..." oninput="updateProgress('ped')"></textarea>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 6 de 6 — Expectativas</div>
+        <label>O que você espera que o ConectaPais possa contribuir para o trabalho pedagógico e para a relação com as famílias?</label>
+        <textarea placeholder="Escreva livremente suas expectativas..." oninput="updateProgress('ped')"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-enviar" onclick="enviarQuestionarioInicial()">🚀 Enviar e Continuar</button>
+  </div>
+</div>
+
+<!-- ===================== PAGE MAIN ===================== -->
+<div id="page-main" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Página Principal</span>
+  </div>
+  <div class="content-topbar" onclick="goTo('page-anteriores')">
+    <span class="content-topbar-icon">📚</span>
+    <span class="content-topbar-text">Conteúdos Anteriores — acesse o histórico de publicações</span>
+    <span class="content-topbar-arrow">→</span>
+  </div>
+  <div class="main-hero">
+    <h1>🌈 Bem-vindo(a) ao ConectaPais!</h1>
+    <p>Aqui você encontra conteúdos novos toda semana sobre a educação do seu filho(a) 💛</p>
+  </div>
+  <div class="main-body">
+
+    <div class="section-title" style="color:var(--roxo);">✨ Conteúdos desta Semana</div>
+    <div class="content-grid">
+      <div class="content-card" onclick="abrirConteudo('c1')">
+        <span class="card-type-pill">📖 Texto</span>
+        <span class="card-emoji">🧠</span>
+        <div class="card-tag">Desenvolvimento Infantil</div>
+        <div class="card-title">O que sua criança aprende brincando</div>
+        <div class="card-desc">Entenda por que a brincadeira é a principal forma de aprendizagem na educação infantil.</div>
+      </div>
+      <div class="content-card card-verde" onclick="abrirConteudo('c2')">
+        <span class="card-type-pill" style="background:var(--verde-light);color:var(--verde);">🎬 Vídeo</span>
+        <span class="card-emoji">🏃</span>
+        <div class="card-tag">Rotina Escolar</div>
+        <div class="card-title">Um dia na educação infantil</div>
+        <div class="card-desc">Veja como é organizada a rotina pedagógica e quais atividades as crianças realizam no dia a dia.</div>
+      </div>
+      <div class="content-card card-azul" onclick="abrirConteudo('c3')">
+        <span class="card-type-pill" style="background:var(--azul-light);color:var(--azul);">📸 Imagem</span>
+        <span class="card-emoji">🎨</span>
+        <div class="card-tag">Arte e Expressão</div>
+        <div class="card-title">Expressão artística: muito mais que colorir</div>
+        <div class="card-desc">A arte desenvolve criatividade, coordenação motora e linguagem. Saiba mais sobre esse trabalho.</div>
+      </div>
+      <div class="content-card card-rosa" onclick="abrirConteudo('c4')">
+        <span class="card-type-pill" style="background:var(--rosa-light);color:var(--rosa);">💡 Dica</span>
+        <span class="card-emoji">🏠</span>
+        <div class="card-tag">Família e Escola</div>
+        <div class="card-title">Como apoiar a aprendizagem em casa</div>
+        <div class="card-desc">Dicas práticas e acolhedoras para a família fortalecer o desenvolvimento da criança no lar.</div>
+      </div>
+      <div class="content-card card-amarelo" onclick="abrirConteudo('c5')">
+        <span class="card-type-pill" style="background:var(--amarelo-light);color:#92400E;">📋 Informativo</span>
+        <span class="card-emoji">📜</span>
+        <div class="card-tag">Documentos Oficiais</div>
+        <div class="card-title">O que diz a BNCC sobre a Educação Infantil</div>
+        <div class="card-desc">Entenda em linguagem simples o que a Base Nacional Comum Curricular propõe para esta etapa.</div>
+      </div>
+    </div>
+
+    <!-- DÚVIDAS -->
+    <div class="duvidas-box">
+      <h3>💬 Tire suas Dúvidas!</h3>
+      <p>Tem alguma pergunta sobre a educação do seu filho(a) ou sobre o trabalho pedagógico do CMEI? Envie aqui! A equipe pedagógica vai responder com carinho. 🤝</p>
+      <div class="duvidas-form">
+        <input type="text" placeholder="Seu código de participante (Ex: MA04)">
+        <input type="text" placeholder="Assunto da sua dúvida">
+        <textarea placeholder="Escreva sua dúvida aqui..."></textarea>
+        <button class="btn-enviar-duvida" onclick="enviarDuvida()">💌 Enviar Dúvida</button>
+        <div class="duvida-enviada" id="duvida-ok">
+          ✅ Dúvida enviada com sucesso! A equipe pedagógica responderá em breve. Fique de olho nos próximos conteúdos! 🌻
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÃO RETA FINAL (normalmente oculto, ativado ao final dos 70 dias) -->
+    <div style="text-align:center;margin-top:1rem;">
+      <button onclick="goTo('page-reta-final')"
+        style="padding:0.8rem 2rem;border:2px dashed #F97316;border-radius:50px;background:var(--laranja-light);color:var(--laranja);
+               font-family:'Baloo 2',cursive;font-weight:800;font-size:0.9rem;cursor:pointer;">
+        🏁 [PESQUISADORA] Simular: Ir para Reta Final dos 70 dias
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE CONTEÚDOS ANTERIORES ===================== -->
+<div id="page-anteriores" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Conteúdos Anteriores</span>
+  </div>
+  <div class="ant-inner">
+    <button class="btn-voltar" onclick="goTo('page-main')">← Voltar à Página Principal</button>
+    <div class="ant-header">
+      <h2>📚 Conteúdos Anteriores</h2>
+      <p>Aqui ficam guardados todos os conteúdos publicados nas semanas anteriores. Acesse quando quiser!</p>
+    </div>
+    <div class="content-grid">
+      <div class="content-card card-verde" onclick="alert('Semana 1 – em breve os conteúdos anteriores serão publicados aqui!')">
+        <span class="card-emoji">📅</span>
+        <div class="card-tag">Semana 1</div>
+        <div class="card-title">Conteúdos serão arquivados aqui</div>
+        <div class="card-desc">À medida que novos conteúdos forem publicados, os anteriores serão arquivados nesta área para consulta.</div>
+      </div>
+      <div class="content-card card-azul" onclick="alert('Os conteúdos anteriores aparecerão aqui automaticamente a cada semana.')">
+        <span class="card-emoji">🗂️</span>
+        <div class="card-tag">Histórico</div>
+        <div class="card-title">Seu histórico de leituras</div>
+        <div class="card-desc">Todos os textos, vídeos e dicas das semanas passadas ficam aqui para você rever quando precisar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE RETA FINAL ===================== -->
+<div id="page-reta-final" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Reta Final! 🏁</span>
+  </div>
+  <div class="rf-inner">
+    <div class="rf-banner">
+      <h2>🎉 Estamos na Reta Final!</h2>
+      <p>Que jornada incrível! Você chegou até aqui e isso é motivo de muito orgulho. Juntos, percorremos 70 dias de aprendizagem, partilha e conexão entre família e escola. 💛</p>
+    </div>
+    <p>Para concluirmos esta etapa tão especial, precisamos da sua colaboração por mais alguns minutinhos. Vamos responder ao <strong>questionário final</strong>? Suas respostas são muito valiosas para a pesquisa! 🌟</p>
+    <p style="font-size:0.9rem;color:var(--cinza);margin-bottom:1.5rem;">Selecione o seu grupo para acessar o questionário correspondente:</p>
+    <div class="rf-btn-row">
+      <button class="btn-rf-ped" onclick="iniciarQuestFinal('ped')">👩‍🏫 Equipe Pedagógica</button>
+      <button class="btn-rf-pais" onclick="iniciarQuestFinal('pais')">👨‍👩‍👧 Pais / Responsáveis</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE QUESTIONÁRIO FINAL ===================== -->
+<div id="page-quest-final" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Questionário Final</span>
+  </div>
+  <div class="quest-inner">
+    <div class="quest-header">
+      <h2>🏁 Questionário Final</h2>
+      <p>Suas respostas nos ajudam a avaliar as contribuições do ConectaPais. Obrigada!</p>
+    </div>
+    <div class="quest-progress"><div class="quest-progress-bar" id="progress-bar-final" style="width:0%"></div></div>
+
+    <div id="quest-final-pais">
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 1 de 7 — Identificação</div>
+        <label>Qual é o seu código de participante?</label>
+        <input type="text" placeholder="Ex: MA04" maxlength="6">
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 2 de 7 — Uso do ConectaPais</div>
+        <label>Com que frequência você acessou os conteúdos do ConectaPais durante os 70 dias?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qf2"><span>Todos os dias ou quase todos</span></label>
+          <label class="radio-opt"><input type="radio" name="qf2"><span>Algumas vezes por semana</span></label>
+          <label class="radio-opt"><input type="radio" name="qf2"><span>Uma vez por semana</span></label>
+          <label class="radio-opt"><input type="radio" name="qf2"><span>Raramente</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 3 de 7 — Aprendizado</div>
+        <label>Após participar do ConectaPais, o quanto você sente que aprendeu mais sobre o trabalho pedagógico realizado na educação infantil?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qf3"><span>Aprendi muito — mudou minha visão sobre a escola</span></label>
+          <label class="radio-opt"><input type="radio" name="qf3"><span>Aprendi bastante — entendo mais do que antes</span></label>
+          <label class="radio-opt"><input type="radio" name="qf3"><span>Aprendi um pouco — algumas coisas novas</span></label>
+          <label class="radio-opt"><input type="radio" name="qf3"><span>Não percebi mudanças significativas</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 4 de 7 — Relação com a Escola</div>
+        <label>Você sente que sua relação com a equipe pedagógica mudou depois de participar do ConectaPais?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qf4"><span>Sim, me sinto muito mais próximo(a) da escola</span></label>
+          <label class="radio-opt"><input type="radio" name="qf4"><span>Sim, melhorou um pouco</span></label>
+          <label class="radio-opt"><input type="radio" name="qf4"><span>Não percebi mudança</span></label>
+          <label class="radio-opt"><input type="radio" name="qf4"><span>Não sei avaliar</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 5 de 7 — Conteúdos</div>
+        <label>Quais tipos de conteúdo você achou mais úteis e interessantes no ConectaPais? <em>(pode marcar mais de um)</em></label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox"><span>Textos sobre desenvolvimento infantil</span></label>
+          <label class="check-opt"><input type="checkbox"><span>Vídeos explicativos</span></label>
+          <label class="check-opt"><input type="checkbox"><span>Dicas para aplicar em casa</span></label>
+          <label class="check-opt"><input type="checkbox"><span>Informações sobre a rotina escolar</span></label>
+          <label class="check-opt"><input type="checkbox"><span>Espaço para tirar dúvidas</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-rosa">
+        <div class="quest-num">Pergunta 6 de 7 — Avaliação Geral</div>
+        <label>Como você avalia o ConectaPais como ferramenta de aproximação entre família e escola?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qf6"><span>⭐⭐⭐⭐⭐ Excelente — superou minhas expectativas!</span></label>
+          <label class="radio-opt"><input type="radio" name="qf6"><span>⭐⭐⭐⭐ Muito bom — foi muito útil</span></label>
+          <label class="radio-opt"><input type="radio" name="qf6"><span>⭐⭐⭐ Bom — gostei, mas pode melhorar</span></label>
+          <label class="radio-opt"><input type="radio" name="qf6"><span>⭐⭐ Regular — esperava mais</span></label>
+          <label class="radio-opt"><input type="radio" name="qf6"><span>⭐ Não atendeu às expectativas</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 7 de 7 — Comentários</div>
+        <label>Deixe aqui um comentário, sugestão ou mensagem sobre sua experiência com o ConectaPais:</label>
+        <textarea placeholder="Escreva livremente. Sua opinião é muito importante para nós! 💛"></textarea>
+      </div>
+    </div>
+
+    <div id="quest-final-ped" style="display:none">
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 1 de 5 — Identificação</div>
+        <label>Qual é o seu código de participante?</label>
+        <input type="text" placeholder="Ex: PO32" maxlength="6">
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 2 de 5 — Participação das Famílias</div>
+        <label>Após os 70 dias do ConectaPais, você percebeu alguma mudança na participação das famílias no cotidiano escolar?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="qfe2"><span>Sim, as famílias ficaram muito mais participativas</span></label>
+          <label class="radio-opt"><input type="radio" name="qfe2"><span>Sim, percebi uma melhora moderada</span></label>
+          <label class="radio-opt"><input type="radio" name="qfe2"><span>Pouco — mudanças muito discretas</span></label>
+          <label class="radio-opt"><input type="radio" name="qfe2"><span>Não percebi mudanças significativas</span></label>
+        </div>
+      </div>
+      <div class="quest-card card-roxo">
+        <div class="quest-num">Pergunta 3 de 5 — Comunicação</div>
+        <label>Na sua avaliação, o ConectaPais contribuiu para melhorar a comunicação entre a equipe pedagógica e as famílias?</label>
+        <textarea placeholder="Descreva sua percepção sobre as mudanças observadas..."></textarea>
+      </div>
+      <div class="quest-card card-verde">
+        <div class="quest-num">Pergunta 4 de 5 — Trabalho Pedagógico</div>
+        <label>Você percebeu que as famílias passaram a compreender melhor o trabalho pedagógico realizado na escola? De que forma?</label>
+        <textarea placeholder="Relate exemplos ou situações observadas..."></textarea>
+      </div>
+      <div class="quest-card card-azul">
+        <div class="quest-num">Pergunta 5 de 5 — Avaliação e Sugestões</div>
+        <label>Como você avalia o ConectaPais como ferramenta de apoio ao trabalho pedagógico? Tem sugestões de melhoria?</label>
+        <textarea placeholder="Sua avaliação e sugestões são muito valiosas para nós!"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-enviar" onclick="enviarQuestFinal()">🏁 Enviar Questionário Final</button>
+  </div>
+</div>
+
+<!-- ===================== PAGE ENQUETE ===================== -->
+<div id="page-enquete" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Enquete Final</span>
+  </div>
+  <div class="enquete-inner">
+    <span style="font-size:3rem;display:block;margin-bottom:1rem;">🤝</span>
+    <h2>Encontro Presencial</h2>
+    <p>Gostaríamos de realizar um último encontro presencial para compartilharmos as experiências vividas nesta jornada. Sua presença seria muito especial para nós! 💛</p>
+
+    <div class="enquete-card">
+      <p>📅 Você teria interesse e disponibilidade em participar de um encontro presencial de encerramento do ConectaPais?</p>
+      <div class="enquete-opts">
+        <button class="enquete-opt" onclick="selecionarEnquete(this, 'sim_total')" id="enq-opt1">
+          🌟 Sim! Tenho muito interesse e estarei lá!
+        </button>
+        <button class="enquete-opt" onclick="selecionarEnquete(this, 'sim_talvez')" id="enq-opt2">
+          🤔 Tenho interesse, mas preciso verificar minha agenda
+        </button>
+        <button class="enquete-opt" onclick="selecionarEnquete(this, 'nao')" id="enq-opt3">
+          😊 Não poderei comparecer, mas acompanho de longe
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-confirmar-enquete" id="btn-confirmar-enq" onclick="confirmarEnquete()" disabled>
+      ✅ Confirmar minha resposta
+    </button>
+  </div>
+</div>
+
+<!-- ===================== PAGE AGRADECIMENTO FINAL ===================== -->
+<div id="page-agradecimento" class="page">
+  <div class="topbar">
+    <span class="topbar-logo">🎓 ConectaPais</span>
+    <span class="topbar-badge">Obrigada! 💛</span>
+  </div>
+  <div class="agr-inner">
+    <span class="agr-emoji-big">🌟</span>
+    <h2>Muito Obrigada!</h2>
+    <p style="color:var(--cinza);font-size:0.97rem;margin-bottom:0.5rem;">De todo o coração 💛</p>
+
+    <div class="agr-card">
+      <p>Chegamos ao fim desta jornada tão especial e quero que saiba: a sua participação foi <strong>fundamental</strong> para que esta pesquisa acontecesse.</p>
+      <p>Cada acesso, cada resposta, cada dúvida enviada e cada momento dedicado ao ConectaPais representa um ato de amor e cuidado com a educação das crianças. <strong>Isso é muito valioso!</strong></p>
+      <p>Esta pesquisa só foi possível graças à confiança e à dedicação de cada família e de cada profissional que se dispôs a fazer parte desta experiência. Vocês são a razão de todo este trabalho! 🌈</p>
+      <p>Espero que os conteúdos compartilhados tenham contribuído para aproximar família e escola, e que essa parceria continue sempre — porque juntos, somos mais fortes para oferecer o melhor às nossas crianças. 🌱</p>
+    </div>
+
+    <div class="agr-pesquisadora">
+      Com muito carinho e gratidão,
+      <strong>Poliani Cristina Fratoni de Oliveira</strong>
+      <em style="display:block;font-size:0.85rem;color:var(--cinza);margin-top:0.2rem;">
+        Mestranda em Ensino de Ciências Humanas, Sociais e da Natureza – UTFPR<br>
+        Orientação: Prof. Dr. David da Silva Pereira
+      </em>
+    </div>
+    <span class="agr-flowers">🌸 🎓 💛 👨‍👩‍👧 🌻 🎨 🌈</span>
+  </div>
+</div>
+
+<!-- ===================== MODAL CONTEÚDO ===================== -->
+<div id="modal-overlay" class="modal-overlay" style="display:none" onclick="fecharModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-title">Título do Conteúdo</h3>
+      <button class="btn-fechar-modal" onclick="fecharModalBtn()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  // ======= ESTADO =======
+  let grupoAtual = ''; // 'pais' ou 'ped'
+  let enqueteSelecionada = '';
+
+  // ======= NAVEGAÇÃO =======
+  function goTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    if (target) { target.classList.add('active'); window.scrollTo(0,0); }
+  }
+
+  // ======= TCLE =======
+  function toggleBtnPed(cb) {
+    document.getElementById('btn-aceito-ped').disabled = !cb.checked;
+  }
+  function toggleBtnPais(cb) {
+    document.getElementById('btn-aceito-pais').disabled = !cb.checked;
+  }
+
+  function aceitarTCLE(grupo) {
+    grupoAtual = grupo;
+    if (grupo === 'ped') {
+      document.getElementById('badge-quest').textContent = 'Questionário Inicial – Equipe Pedagógica';
+      document.getElementById('desc-quest').textContent = 'Suas respostas nos ajudam a entender as percepções da equipe pedagógica sobre a participação familiar.';
+      document.getElementById('quest-pais').style.display = 'none';
+      document.getElementById('quest-ped').style.display = 'block';
+    } else {
+      document.getElementById('badge-quest').textContent = 'Questionário Inicial – Famílias';
+      document.getElementById('desc-quest').textContent = 'Suas respostas nos ajudam a conhecer melhor a comunidade escolar e suas percepções sobre a educação infantil.';
+      document.getElementById('quest-pais').style.display = 'block';
+      document.getElementById('quest-ped').style.display = 'none';
+    }
+    updateProgress(grupo);
+    goTo('page-quest-inicial');
+  }
+
+  function naoAceitar() { goTo('page-encerramento'); }
+
+  // ======= PROGRESSO DO QUESTIONÁRIO =======
+  function updateProgress(grupo) {
+    const container = grupo === 'pais' ? document.getElementById('quest-pais') : document.getElementById('quest-ped');
+    const total = container.querySelectorAll('.quest-card').length;
+    let respondidas = 0;
+    container.querySelectorAll('.quest-card').forEach(card => {
+      const hasText = [...card.querySelectorAll('input[type=text], textarea')].some(i => i.value.trim().length > 2);
+      const hasRadio = [...card.querySelectorAll('input[type=radio]')].some(r => r.checked);
+      const hasCheck = [...card.querySelectorAll('input[type=checkbox]')].some(c => c.checked);
+      if (hasText || hasRadio || hasCheck) respondidas++;
+    });
+    const pct = Math.round((respondidas / total) * 100);
+    const bar = document.getElementById('progress-bar');
+    if (bar) bar.style.width = pct + '%';
+  }
+
+  // ======= ENVIAR QUESTIONÁRIO INICIAL =======
+  function enviarQuestionarioInicial() { goTo('page-main'); }
+
+  // ======= DÚVIDAS =======
+  function enviarDuvida() {
+    document.getElementById('duvida-ok').style.display = 'block';
+    setTimeout(() => { document.getElementById('duvida-ok').style.display = 'none'; }, 5000);
+  }
+
+  // ======= RETA FINAL =======
+  function iniciarQuestFinal(grupo) {
+    if (grupo === 'pais') {
+      document.getElementById('quest-final-pais').style.display = 'block';
+      document.getElementById('quest-final-ped').style.display = 'none';
+    } else {
+      document.getElementById('quest-final-pais').style.display = 'none';
+      document.getElementById('quest-final-ped').style.display = 'block';
+    }
+    goTo('page-quest-final');
+  }
+
+  function enviarQuestFinal() { goTo('page-enquete'); }
+
+  // ======= ENQUETE =======
+  function selecionarEnquete(btn, valor) {
+    document.querySelectorAll('.enquete-opt').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+    enqueteSelecionada = valor;
+    document.getElementById('btn-confirmar-enq').disabled = false;
+  }
+
+  function confirmarEnquete() { goTo('page-agradecimento'); }
+
+  // ======= MODAL CONTEÚDO =======
+  const conteudos = {
+    c1: {
+      title: '🧠 O que sua criança aprende brincando',
+      body: `
+        <p>Muitas famílias se perguntam: "Meu filho(a) só fica brincando na escola — está aprendendo de verdade?" A resposta é um grande <strong>SIM!</strong> 🎉</p>
+        <div class="modal-video-placeholder"><span>🎮</span><p>Vídeo disponível em breve</p></div>
+        <h4>Por que a brincadeira é aprendizagem?</h4>
+        <p>Na educação infantil, a brincadeira não é um passatempo — ela é a <strong>principal forma de aprender</strong> nesta fase da vida. Ao brincar, a criança:</p>
+        <ul>
+          <li>Desenvolve a <strong>linguagem</strong> — nomeia objetos, conta histórias, dialoga;</li>
+          <li>Exercita o <strong>pensamento</strong> — resolve problemas, cria regras, imagina;</li>
+          <li>Aprende a <strong>conviver</strong> — compartilha, negocia, respeita o outro;</li>
+          <li>Fortalece a <strong>coordenação motora</strong> — encaixa, constrói, desenha, pula;</li>
+          <li>Expressa seus <strong>sentimentos</strong> — processa emoções de forma saudável.</li>
+        </ul>
+        <h4>O papel do(a) professor(a)</h4>
+        <p>O(a) professor(a) planeja cada momento de brincadeira com <strong>intencionalidade pedagógica</strong>. Isso significa que os brinquedos escolhidos, os espaços organizados e as interações propostas têm objetivos específicos para o desenvolvimento de cada criança.</p>
+        <p>A Base Nacional Comum Curricular (BNCC) afirma que <em>brincar, conviver, participar, explorar, expressar-se e conhecer-se</em> são direitos fundamentais das crianças na educação infantil.</p>
+        <h4>💡 Dica para casa</h4>
+        <p>Reserve momentos de brincadeira livre com seu filho(a) em casa. Pergunte sobre o que ele(a) brincou na escola — isso fortalece a conexão família-escola e estimula a linguagem da criança!</p>
+      `
+    },
+    c2: {
+      title: '🏃 Um dia na Educação Infantil',
+      body: `
+        <div class="modal-video-placeholder"><span>🎬</span><p>Vídeo: "Um dia na vida das crianças do CMEI" — em breve</p></div>
+        <h4>Como é a rotina das crianças?</h4>
+        <p>A rotina na educação infantil é cuidadosamente planejada para oferecer segurança, previsibilidade e riqueza de experiências. Confira como é um dia típico:</p>
+        <ul>
+          <li>🌅 <strong>Acolhida:</strong> recepção carinhosa, rodas de conversa, músicas;</li>
+          <li>🍎 <strong>Alimentação:</strong> momentos de refeição que também ensinam autonomia e hábitos saudáveis;</li>
+          <li>🎨 <strong>Atividades dirigidas:</strong> propostas com objetivos pedagógicos específicos;</li>
+          <li>🌿 <strong>Exploração e brincadeiras:</strong> nos espaços internos e externos;</li>
+          <li>😴 <strong>Repouso:</strong> para os menores, respeitando as necessidades fisiológicas;</li>
+          <li>👋 <strong>Despedida:</strong> com aconchego e diálogo sobre o dia.</li>
+        </ul>
+        <p>Cada momento da rotina tem <strong>valor educativo</strong>. Até o horário da troca de fralda ou do lanche são oportunidades de aprendizagem e fortalecimento de vínculos.</p>
+      `
+    },
+    c3: {
+      title: '🎨 Expressão artística: muito mais que colorir',
+      body: `
+        <h4>Arte na Educação Infantil</h4>
+        <p>Quando seu filho(a) traz para casa um desenho ou pintura, ele(a) não está "só rabiscando" — está se comunicando com o mundo, expressando sentimentos e desenvolvendo habilidades fundamentais!</p>
+        <h4>O que a arte desenvolve?</h4>
+        <ul>
+          <li>🖊️ <strong>Coordenação motora fina</strong> — necessária para escrever no futuro;</li>
+          <li>💭 <strong>Criatividade e imaginação</strong> — essenciais para resolver problemas;</li>
+          <li>💬 <strong>Linguagem</strong> — a criança conta histórias através das imagens;</li>
+          <li>❤️ <strong>Expressão emocional</strong> — processa experiências e sentimentos;</li>
+          <li>🧩 <strong>Concentração e perseverança</strong> — terminar uma criação é um objetivo!</li>
+        </ul>
+        <h4>💡 Valorize a arte do seu filho(a)!</h4>
+        <p>Pergunte sobre o desenho, peça para contar a história da imagem, exponha os trabalhos em casa. Esse reconhecimento é fundamental para a autoestima e o desenvolvimento da criança!</p>
+      `
+    },
+    c4: {
+      title: '🏠 Como apoiar a aprendizagem em casa',
+      body: `
+        <h4>Família e escola: parceiros na educação</h4>
+        <p>Você não precisa ser professor(a) para apoiar o desenvolvimento do seu filho(a) em casa! Pequenas atitudes do dia a dia fazem uma diferença enorme.</p>
+        <h4>💡 Dicas práticas e acolhedoras</h4>
+        <ul>
+          <li>📖 <strong>Leia juntos:</strong> livros, histórias inventadas, rótulos de embalagens — tudo conta!</li>
+          <li>💬 <strong>Converse bastante:</strong> pergunte sobre o dia na escola, sobre os amigos, sobre o que sentiu;</li>
+          <li>🎵 <strong>Cante músicas:</strong> cantigas e rimas desenvolvem linguagem e memória;</li>
+          <li>🍳 <strong>Inclua nas tarefas:</strong> separar frutas, regar plantas — são aprendizagens reais;</li>
+          <li>✏️ <strong>Ofereça materiais:</strong> papel, lápis, massinha — estimule a expressão criativa;</li>
+          <li>🌳 <strong>Brinque ao ar livre:</strong> correr, pular, explorar a natureza é fundamental;</li>
+          <li>⏰ <strong>Mantenha rotinas:</strong> horários regulares dão segurança às crianças.</li>
+        </ul>
+        <p>Lembre-se: o mais importante é a <strong>qualidade da presença</strong>, não a quantidade de atividades. Momentos de afeto e atenção genuína são o melhor presente para o desenvolvimento infantil! 💛</p>
+      `
+    },
+    c5: {
+      title: '📜 O que diz a BNCC sobre a Educação Infantil',
+      body: `
+        <h4>O que é a BNCC?</h4>
+        <p>A <strong>Base Nacional Comum Curricular (BNCC)</strong> é um documento oficial do governo federal que orienta o que todas as escolas do Brasil devem garantir para as crianças em cada etapa da educação.</p>
+        <h4>O que a BNCC garante para a Educação Infantil?</h4>
+        <p>A BNCC estabelece que as crianças de 0 a 5 anos têm o direito de:</p>
+        <ul>
+          <li>👫 <strong>Conviver</strong> — com outras crianças e adultos em diversas situações;</li>
+          <li>🎮 <strong>Brincar</strong> — de diferentes formas, em espaços e tempos diversos;</li>
+          <li>🙋 <strong>Participar</strong> — de decisões e situações da vida coletiva;</li>
+          <li>🔍 <strong>Explorar</strong> — movimentos, gestos, sons, formas e o mundo ao redor;</li>
+          <li>🗣️ <strong>Expressar-se</strong> — em diferentes linguagens: corporal, artística, verbal;</li>
+          <li>🌟 <strong>Conhecer-se</strong> — reconhecendo sua identidade e valorizando as diferenças.</li>
+        </ul>
+        <h4>O que isso significa na prática?</h4>
+        <p>Significa que as atividades propostas pelos professores — mesmo as que parecem simples, como brincar na areia, cantar músicas ou modelar massinha — têm fundamentação científica e pedagógica, garantindo o desenvolvimento integral de cada criança! 🌱</p>
+      `
+    }
+  };
+
+  function abrirConteudo(id) {
+    const c = conteudos[id];
+    document.getElementById('modal-title').textContent = c.title;
+    document.getElementById('modal-body').innerHTML = c.body;
+    document.getElementById('modal-overlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharModal(e) {
+    if (e.target === document.getElementById('modal-overlay')) fecharModalBtn();
+  }
+  function fecharModalBtn() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ======= ESCAPE KEY =======
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModalBtn(); });
+</script>
+</body>
+</html>
